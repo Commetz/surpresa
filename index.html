@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Surpresa Especial</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background:
+        radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.05) 0%, transparent 2%),
+        radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.04) 0%, transparent 3%);
+      z-index: -2;
+    }
+
+    .firefly {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: radial-gradient(circle, #ffffcc 0%, rgb(255, 255, 255) 40%, transparent 70%);
+      border-radius: 50%;
+      animation: fly 20s linear infinite, blink 2.5s ease-in-out infinite;
+      pointer-events: none;
+      z-index: -1;
+      box-shadow: 0 0 8px rgba(255, 255, 150, 0.8), 0 0 16px rgba(255, 255, 100, 0.5);
+    }
+
+
+    @keyframes blink {
+      0%, 100% { opacity: 0.2; }
+      50% { opacity: 1; }
+    }
+
+    @keyframes fly {
+      0% {
+        transform: translate(0, 0);
+      }
+      25% {
+        transform: translate(30px, -40px);
+      }
+      50% {
+        transform: translate(-20px, 30px);
+      }
+      75% {
+        transform: translate(40px, 20px);
+      }
+      100% {
+        transform: translate(0, 0);
+      }
+    }
+
+    #slideshow-container {
+      display: none;
+      width: 90%;
+      max-width: 420px;
+      height: 65vh;
+      max-height: 650px;
+      overflow: hidden;
+      border: 3px solid #ffffff;
+      border-radius: 18px;
+      box-shadow: 
+        0 0 25px rgba(255, 255, 255, 0.15),
+        0 0 50px rgba(0, 0, 0, 0.25),
+        inset 0 0 15px rgba(255, 255, 255, 0.1);
+      position: relative;
+      transform: scale(0.95);
+      opacity: 0;
+      transition: all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    #slideshow-container.show {
+      transform: scale(1);
+      opacity: 1;
+    }
+
+    #slideshow-container::after {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      border-radius: 15px;
+      box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.7);
+      pointer-events: none;
+    }
+
+    #slideshow-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease-in-out;
+    }
+
+    #love-text {
+      display: none;
+      font-size: 1.5rem;
+      color: #ffffff;
+      margin-top: 25px;
+      font-weight: 500;
+      padding: 0 20px;
+      max-width: 500px;
+      line-height: 1.8;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+      transform: translateY(20px);
+      opacity: 0;
+      transition: all 1.2s ease-out 0.3s;
+    }
+
+    #love-text.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    #love-text::before, #love-text::after {
+      display: inline-block;
+      margin: 0 15px;
+      opacity: 0.7;
+      font-size: 1.2rem;
+      animation: pulse 2s infinite;
+    }
+
+    button {
+      padding: 16px 40px;
+      font-size: 1.1rem;
+      background: linear-gradient(to bottom, #ffffff, #f0f0f0);
+      color: #000000;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      box-shadow: 
+        0 5px 15px rgba(0, 0, 0, 0.3),
+        0 0 10px rgba(255, 255, 255, 0.2);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      overflow: hidden;
+    }
+
+    button::after {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transform: translateX(-100%);
+      transition: transform 0.6s ease;
+    }
+
+    button:hover {
+      transform: translateY(-3px);
+      box-shadow: 
+        0 8px 20px rgba(0, 0, 0, 0.4),
+        0 0 15px rgba(255, 255, 255, 0.3);
+    }
+
+    button:hover::after {
+      transform: translateX(100%);
+    }
+
+    button:active {
+      transform: translateY(1px);
+      box-shadow: 
+        0 2px 8px rgba(0, 0, 0, 0.3),
+        0 0 5px rgba(255, 255, 255, 0.2);
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 0.7; }
+      50% { transform: scale(1.2); opacity: 1; }
+      100% { transform: scale(1); opacity: 0.7; }
+    }
+
+    @media (max-width: 480px) {
+      #slideshow-container {
+        max-width: 90%;
+        height: 55vh;
+      }
+
+      #love-text {
+        font-size: 1.3rem;
+        margin-top: 20px;
+      }
+
+      button {
+        padding: 14px 35px;
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="firefly" style="top:10%; left:15%; animation-delay: 0s;"></div>
+  <div class="firefly" style="top:30%; left:80%; animation-delay: 1s;"></div>
+  <div class="firefly" style="top:50%; left:40%; animation-delay: 2s;"></div>
+  <div class="firefly" style="top:70%; left:60%; animation-delay: 3s;"></div>
+  <div class="firefly" style="top:85%; left:20%; animation-delay: 4s;"></div>
+  <div class="firefly" style="top:20%; left:50%; animation-delay: 1.5s;"></div>
+  <div class="firefly" style="top:60%; left:10%; animation-delay: 2.5s;"></div>
+
+  <button onclick="start()">Clique Aqui 💜</button>
+
+  <div id="slideshow-container">
+    <img id="slideshow" src="" alt="Nossos Momentos">
+  </div>
+
+  <div id="love-text">Eu te amo.<br>De agora em diante estamos juntos você queira ou não.</div>
+
+  <audio id="music">
+    <source src="vmz_musica.mp3" type="audio/mpeg">
+    Seu navegador não suporta o elemento de áudio.
+  </audio>
+
+  <script>
+    const images = [
+      "foto1.jpg", "foto2.jpg", "foto3.jpg", "foto4.jpg", "foto5.jpg",
+      "foto6.jpg", "foto7.jpg", "foto8.jpg", "foto9.jpg", "foto10.jpg",
+      "foto11.jpg", "foto12.jpg", "foto13.jpg", "foto14.jpg", "foto15.jpg",
+      "foto16.jpg", "foto17.jpg", "foto18.jpg", "foto19.jpg", "foto20.jpg",
+      "foto21.jpg", "foto22.jpg", "foto23.jpg", "foto24.jpg", "foto25.jpg",
+      "foto26.jpg", "foto27.jpg", "foto28.jpg", "foto29.jpg", "foto30.jpg",
+      "foto31.jpg", "foto32.jpg"
+    ];
+
+    let index = 0;
+    let interval;
+
+    function start() {
+      const button = document.querySelector("button");
+      button.style.transform = "scale(0.8)";
+      button.style.opacity = "0";
+      setTimeout(() => button.style.display = "none", 400);
+
+      const music = document.getElementById("music");
+      music.play();
+
+      const slideshowContainer = document.getElementById("slideshow-container");
+      const loveText = document.getElementById("love-text");
+
+      slideshowContainer.style.display = "block";
+      loveText.style.display = "block";
+
+      setTimeout(() => slideshowContainer.classList.add("show"), 50);
+      setTimeout(() => loveText.classList.add("show"), 300);
+
+      const slideshow = document.getElementById("slideshow");
+      slideshow.src = images[index];
+
+      interval = setInterval(() => {
+        index = (index + 1) % images.length;
+        slideshow.style.opacity = "0";
+        setTimeout(() => {
+          slideshow.src = images[index];
+          slideshow.style.opacity = "1";
+        }, 300);
+      }, 3000);
+    }
+  </script>
+</body>
+</html>
