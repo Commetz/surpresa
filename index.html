@@ -230,53 +230,56 @@
   </audio>
 
   <script>
-    const images = [
-      "foto1.jpg", "foto2.jpg", "foto3.jpg", "foto4.jpg", "foto5.jpg",
-      "foto6.jpg", "foto7.jpg", "foto8.jpg", "foto9.jpg", "foto10.jpg",
-      "foto11.jpg", "foto12.jpg", "foto13.jpg", "foto14.jpg", "foto15.jpg",
-      "foto16.jpg", "foto17.jpg", "foto18.jpg", "foto19.jpg", "foto20.jpg",
-      "foto21.jpg", "foto22.jpg", "foto23.jpg", "foto24.jpg", "foto25.jpg",
-      "foto26.jpg", "foto27.jpg", "foto28.jpg", "foto29.jpg", "foto30.jpg",
-      "foto31.jpg", "foto32.jpg"
-    ];
+  const images = [
+    "foto1.jpg", "foto2.jpg", "foto3.jpg", "foto4.jpg", "foto5.jpg",
+    "foto6.jpg", "foto7.jpg", "foto8.jpg", "foto9.jpg", "foto10.jpg",
+    "foto11.jpg", "foto12.jpg", "foto13.jpg", "foto14.jpg", "foto15.jpg",
+    "foto16.jpg", "foto17.jpg", "foto18.jpg", "foto19.jpg", "foto20.jpg",
+    "foto21.jpg", "foto22.jpg", "foto23.jpg", "foto24.jpg", "foto25.jpg",
+    "foto26.jpg", "foto27.jpg", "foto28.jpg", "foto29.jpg", "foto30.jpg",
+    "foto31.jpg", "foto32.jpg"
+  ];
 
-    let index = 0;
-    let interval;
+  let index = 0;
+  let interval;
 
-    function start() {
-      const button = document.querySelector("button");
-      button.style.transform = "scale(0.8)";
-      button.style.opacity = "0";
-      setTimeout(() => button.style.display = "none", 400);
+  function start() {
+    const button = document.querySelector("button");
+    button.style.transform = "scale(0.8)";
+    button.style.opacity = "0";
+    setTimeout(() => button.style.display = "none", 400);
 
-      const music = document.getElementById("music");
-      music.play();
+    const music = document.getElementById("music");
+    music.play();
 
-      const slideshowContainer = document.getElementById("slideshow-container");
-      const loveText = document.getElementById("love-text");
+    const slideshowContainer = document.getElementById("slideshow-container");
+    const loveText = document.getElementById("love-text");
 
-      slideshowContainer.style.display = "block";
-      loveText.style.display = "block";
+    slideshowContainer.style.display = "block";
+    loveText.style.display = "block";
 
-      setTimeout(() => slideshowContainer.classList.add("show"), 50);
-      setTimeout(() => loveText.classList.add("show"), 300);
+    setTimeout(() => slideshowContainer.classList.add("show"), 50);
+    setTimeout(() => loveText.classList.add("show"), 300);
 
-      const slideshow = document.getElementById("slideshow");
-      slideshow.src = images[index];
+    const slideshow = document.getElementById("slideshow");
+    slideshow.src = images[index];
+    slideshow.style.opacity = "1";
 
-      interval = setInterval(() => {
-        const nextImage = new Image();
-        index = (index + 1) % images.length;
-        nextImage.src = images[index];
-        nextImage.onload = () => {
-          slideshow.style.opacity = "0";
-          setTimeout(() => {
-            slideshow.src = nextImage.src;
-            slideshow.style.opacity = "1";
-          }, 100);
-        };
-      }, 3000);
-    }
-  </script>
+    interval = setInterval(() => {
+      const nextIndex = (index + 1) % images.length;
+      const nextImage = new Image();
+      nextImage.src = images[nextIndex];
+      nextImage.onload = () => {
+        slideshow.style.opacity = "0";
+        setTimeout(() => {
+          slideshow.src = images[nextIndex];
+          slideshow.style.opacity = "1";
+          index = nextIndex;
+        }, 100); // tempo pequeno só para dar tempo da opacidade resetar
+      };
+    }, 3000);
+  }
+</script>
+
 </body>
 </html>
